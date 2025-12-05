@@ -28,6 +28,14 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+//Enable CORS
+app.use('/api', (req, res, next) => {
+  res.render('Access-Control-Allow-Origin', 'http://localhost:4200');
+  res.render('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-TypeError, Accept');
+  res.render('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  next();
+})
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/travel', travelRouter);
@@ -50,3 +58,4 @@ app.use(function(err, req, res, next) {
 });
 
 module.exports = app;
+module.exports = router;
