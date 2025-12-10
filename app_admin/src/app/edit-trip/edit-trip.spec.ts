@@ -1,6 +1,5 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { EditTrip } from './edit-trip';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 describe('EditTrip', () => {
   let component: EditTrip;

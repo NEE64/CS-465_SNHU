@@ -1,24 +1,80 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-
-import { trips } from '../data/trips';
-import { Observable } from 'rxjs';
+import { lastValueFrom } from 'rxjs';
+import { BROWSER_STORAGE } from "../storage";
+import { AuthResponse } from '../services/auth-response';
 import { Trip } from '../models/trip';
+import { User } from '../models/user';
 
-@Injectable({
-  providedIn: 'root',
-})
-
+@Injectable()
 export class TripData {
-  addTrip: any;
-  updateTrip: any;
-  deleteTrip: any;
-  getTrip: any;
-  constructor(private http: HttpClient){}
+  constructor(
+    private httpClient: HttpClient,
+    @Inject(BROWSER_STORAGE) private storage: Storage
+  ) { }
 
-  getTrips(tripCode: string) : Observable<Trip[]> {
-    let url = 'http://localhost:3000/api/trips';
+  private apiBaseUrl = 'http://localhost:3000/api';
 
-    return this.http.get<Trip[]>(url);
+  public async getTrips(): Promise<Trip[]> {
+    console.log('Inside TripData#getTrips');
+    return await lastValueFrom(
+      this.httpClient
+        .get<Trip[]>(`${this.apiBaseUrl}/trips`)
+    ).catch(this.handleError);
+  }
+
+  public async getTrip(tripCode: string): Promise<Trip[]> {
+    console.log(`Inside TripData#getTrip('${tripCode}')`);
+    return await lastValueFrom(
+      this.httpClient
+        .get<Trip[]>(`${this.apiBaseUrl}/trips/${tripCode}`)
+    ).catch(this.handleError);
+  }
+
+  public async addTrip(formData: Trip): Promise<Trip> {
+    console.log('Inside TripData#addTrip');
+    return await lastValueFrom(
+      this.httpClient
+        .post<Trip[]>(`${this.apiBaseUrl}/trips`, formData)
+    ).catch(this.handleError);
+  }
+
+  public async updateTrip(formData: Trip): Promise<Trip[]> {
+    console.log(`Inside TripData#updateTrip('${formData.code}')`);
+    return await lastValueFrom(
+      this.httpClient
+        .put<Trip[]>(`${this.apiBaseUrl}/trips/${formData.code}`, formData)
+    ).catch(this.handleError);
+  }
+
+  public async deleteTrip(tripCode: string): Promise<any> {
+    console.log(`Inside TripData#deleteTrip('${tripCode}')`);
+    return await lastValueFrom(
+      this.httpClient
+        .delete(`${this.apiBaseUrl}/trips/${tripCode}`)
+    ).catch(this.handleError);
+  }
+
+  public login(user: User): Promise<AuthResponse> {
+    console.log('Inside TripData#login');
+    return this.makeAuthApiCall('login', user);
+  }
+
+  public register(user: User): Promise<AuthResponse> {
+    console.log('Inside TripData#register');
+    return this.makeAuthApiCall('register', user);
+  }
+
+  private async makeAuthApiCall(urlPath: string, user: User): Promise<AuthResponse> {
+    console.log(`Inside TripData#makeAuthApiCall('${urlPath}')`);
+    return await lastValueFrom(
+      this.httpClient
+        .post<AuthResponse>(`${this.apiBaseUrl}/${urlPath}`, user)
+    ).catch(this.handleError);
+  }
+
+  private handleError(error: any): Promise<any> {
+    console.error('Something has gone wrong', error);
+    return Promise.reject(error.message || error);
   }
 }
