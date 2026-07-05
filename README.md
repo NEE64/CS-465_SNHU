@@ -1,5 +1,5 @@
 # CS-465_SNHU
-This is my private repository for the course CS-465 at SNHU.
+This is my public* repository for the course CS-465 at SNHU.
 
 - Compare and contrast the types of frontend development you used in your full stack project, including Express HTML, JavaScript, and the single-page application (SPA).
 
@@ -13,3 +13,4 @@ The NoSQL MongoDB database is known for being highly scalable and very easy to m
 
 JSON differs from Javascript in that JSON can format object data and is often easy to read with the Java language. Also, JavaScript can take data and convert it to an object in Java. 
 
+*Visibility changed from private to public on 07/05/2026.
